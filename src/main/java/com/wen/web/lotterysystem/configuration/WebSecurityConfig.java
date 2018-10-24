@@ -44,24 +44,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()//TODO  允许所有所用户访问"/"
+                //TODO  允许所有所用户访问"/"
+                .antMatchers("/").permitAll()
                 //.antMatchers("/user/**").permitAll()
-                //.anyRequest().authenticated()//TODO 其他的地址访问均需要验证
+                //TODO 其他的地址访问均需要验证
+                //.anyRequest().authenticated()
                 .and().addFilter(CustomAuthenticationFilter())
-                .formLogin()//TODO 配置登陆页面
-                .loginPage("/login")//TODO 指定登录界面的访问路劲
-                .defaultSuccessUrl("/user")//TODO 登录成功默认跳转的路径
-                //.failureUrl("/login?error=true")//TODO 登陆失败后跳转路径，为了给客户端提示
+                //TODO 配置登陆页面
+                .formLogin()
+                //TODO 指定登录界面的访问路劲
+                .loginPage("/login")
+                //TODO 登录成功默认跳转的路径
+                .defaultSuccessUrl("/user")
+                //TODO 登陆失败后跳转路径，为了给客户端提示
+                //.failureUrl("/login?error=true")
                 .and()
                 .logout()//用户退出操作
                 //.logoutRequestMatcher(new AntPathRequestMatcher("/logout","POST")) //用户退出所访问的路径，需要使用POST的方式
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")//TODO 退出成功后所要访问的路径
+                //TODO 退出成功后所要访问的路径
+                .logoutSuccessUrl("/login")
                 .permitAll();
+
+        //TODO 以下这句就可以控制单个用户只能创建一个session，也就只能在服务器登录一次
+        http.sessionManagement().maximumSessions(1).expiredUrl("/login");
     }
 
     /**
      * 配置全局
+     *
      * @param auth
      * @throws Exception
      */
