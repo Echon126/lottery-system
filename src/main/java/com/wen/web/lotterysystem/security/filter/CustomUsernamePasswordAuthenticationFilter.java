@@ -1,4 +1,4 @@
-package com.wen.web.lotterysystem.security;
+package com.wen.web.lotterysystem.security.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,7 +6,6 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
@@ -17,10 +16,10 @@ import javax.servlet.http.HttpServletResponse;
  * @author admin
  * @date 2018-10-23 14:51
  */
-public class UsernamePasswordAuthenticationFilterChild extends UsernamePasswordAuthenticationFilter {
-    private static Logger logger = LoggerFactory.getLogger(UsernamePasswordAuthenticationFilterChild.class);
+public class CustomUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private static Logger logger = LoggerFactory.getLogger(CustomUsernamePasswordAuthenticationFilter.class);
 
-    public UsernamePasswordAuthenticationFilterChild() {
+    public CustomUsernamePasswordAuthenticationFilter() {
         super();
     }
 
@@ -30,17 +29,24 @@ public class UsernamePasswordAuthenticationFilterChild extends UsernamePasswordA
         if (!request.getMethod().equalsIgnoreCase("POST")) {
             throw new AuthenticationServiceException("");
         }
+        String code = "";
         String username = this.obtainUsername(request);
         String password = this.obtainPassword(request);
         if (StringUtils.isEmpty(username)) {
-            request.setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, "用户名或者密码错误!");
+            //setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, "用户名或者密码错误!");
             throw new AuthenticationServiceException("用户名不能为空");
         }
 
         if (StringUtils.isEmpty(password)) {
-            request.setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, "用户名或者密码错误!");
-            throw new AuthenticationServiceException("密码不能 为空");
+            //request.setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, "用户名或者密码错误!");
+            throw new AuthenticationServiceException("密码不能为空");
         }
+
+       /* if (StringUtils.isEmpty(code)) {
+            throw new AuthenticationServiceException("验证码错误");
+        }*/
+
+
         request.getSession().setAttribute("user", "user");
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
         this.setDetails(request, authRequest);

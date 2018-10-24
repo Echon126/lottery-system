@@ -1,4 +1,4 @@
-package com.wen.web.lotterysystem.security;
+package com.wen.web.lotterysystem.security.service;
 
 import com.wen.web.lotterysystem.data.entity.SecurityUser;
 import com.wen.web.lotterysystem.data.entity.UserInfo;

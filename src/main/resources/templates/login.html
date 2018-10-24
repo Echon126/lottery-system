@@ -34,9 +34,11 @@
                             </div>
                         </div>
                         <br>
+                      <!--  <div th:if="${param.error}">
+                            <p style="text-align: center" class="text-danger" >登录失败，账号或密码错误!</p>
+                        </div>-->
                         <div>
-                            <span th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">登录失败，账号或密码错误!</span>
-
+                            <p style="text-align: center" class="text-danger" th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">登录失败，账号或密码错误!</p>
                         </div>
                         <div th:if="${result}">
                             <p style="text-align: center" class="text-success" th:text="${result}"></p>

@@ -1,12 +1,13 @@
 package com.wen.web.lotterysystem.configuration;
 
-import com.wen.web.lotterysystem.security.CustomUserDetailsService;
-import com.wen.web.lotterysystem.security.UsernamePasswordAuthenticationFilterChild;
+import com.wen.web.lotterysystem.security.service.CustomUserDetailsService;
+import com.wen.web.lotterysystem.security.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.wen.web.lotterysystem.security.handler.AuthenticationFailureHandlerImpl;
 import com.wen.web.lotterysystem.security.handler.AuthenticationSuccessHandlerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -15,8 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 
 /**
  * @author admin
@@ -45,10 +44,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/","/login").permitAll()//TODO  允许所有所用户访问"/"
+                .antMatchers("/").permitAll()//TODO  允许所有所用户访问"/"
                 //.antMatchers("/user/**").permitAll()
-                // .anyRequest().authenticated()//TODO 其他的地址访问均需要验证
-                .and().addFilterAt(CustomAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                //.anyRequest().authenticated()//TODO 其他的地址访问均需要验证
+                .and().addFilter(CustomAuthenticationFilter())
                 .formLogin()//TODO 配置登陆页面
                 .loginPage("/login")//TODO 指定登录界面的访问路劲
                 .defaultSuccessUrl("/user")//TODO 登录成功默认跳转的路径
@@ -57,15 +56,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()//用户退出操作
                 //.logoutRequestMatcher(new AntPathRequestMatcher("/logout","POST")) //用户退出所访问的路径，需要使用POST的方式
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login");//TODO 退出成功后所要访问的路径
-
+                .logoutSuccessUrl("/login")//TODO 退出成功后所要访问的路径
+                .permitAll();
     }
 
+    /**
+     * 配置全局
+     * @param auth
+     * @throws Exception
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-        //auth.authenticationProvider(customAuthenticationProvider);
+        //auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(daoAuthenticationProvider());
         auth.eraseCredentials(false);//允许记住密码
+    }
+
+    /**
+     * TODO 配置 DaoAuthenticationProvider，可以设置异常的抛出，和相应的属性字段值
+     *
+     * @return
+     */
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setHideUserNotFoundExceptions(false);
+        daoAuthenticationProvider.setUserDetailsService(customUserDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
     }
 
     /**
@@ -89,10 +107,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public UsernamePasswordAuthenticationFilterChild CustomAuthenticationFilter() throws Exception {
-        UsernamePasswordAuthenticationFilterChild authenticationFilterChild = new UsernamePasswordAuthenticationFilterChild();
+    public CustomUsernamePasswordAuthenticationFilter CustomAuthenticationFilter() throws Exception {
+        CustomUsernamePasswordAuthenticationFilter authenticationFilterChild = new CustomUsernamePasswordAuthenticationFilter();
         authenticationFilterChild.setAuthenticationManager(authenticationManagerBean());
-        authenticationFilterChild.setAuthenticationSuccessHandler(authenticationSuccessHandler);//TODO 使用自己实现authenticationSuccessHandler接口的类
+        //TODO 使用自己实现authenticationSuccessHandler接口的类
+        authenticationFilterChild.setAuthenticationSuccessHandler(authenticationSuccessHandler);
+        //TODO 使用自定义的authenticationFailureHandler
         authenticationFilterChild.setAuthenticationFailureHandler(authenticationFailureHandler);
         return authenticationFilterChild;
     }
