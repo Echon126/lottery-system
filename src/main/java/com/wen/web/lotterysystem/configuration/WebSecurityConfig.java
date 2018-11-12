@@ -1,12 +1,11 @@
 package com.wen.web.lotterysystem.configuration;
 
-import com.wen.web.lotterysystem.security.service.CustomUserDetailsService;
 import com.wen.web.lotterysystem.security.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.wen.web.lotterysystem.security.handler.AuthenticationFailureHandlerImpl;
 import com.wen.web.lotterysystem.security.handler.AuthenticationSuccessHandlerImpl;
+import com.wen.web.lotterysystem.security.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,12 +15,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @author admin
  * @date 2018-10-29 11:41
  */
-@Configuration
+//TODO 帮助创建SpringSecurity工作中要使用的Filter
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -33,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AuthenticationFailureHandlerImpl authenticationFailureHandler;
+
 
     /**
      * 匹配 "/" 路径，不需要权限即可访问
@@ -49,13 +50,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers("/user/**").permitAll()
                 //TODO 其他的地址访问均需要验证
                 //.anyRequest().authenticated()
-                .and().addFilter(CustomAuthenticationFilter())
+                .and().addFilterAt(CustomAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 //TODO 配置登陆页面
                 .formLogin()
                 //TODO 指定登录界面的访问路劲
                 .loginPage("/login")
                 //TODO 登录成功默认跳转的路径
-                .defaultSuccessUrl("/user")
+                .defaultSuccessUrl("/index")
                 //TODO 登陆失败后跳转路径，为了给客户端提示
                 //.failureUrl("/login?error=true")
                 .and()
@@ -64,9 +65,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 //TODO 退出成功后所要访问的路径
                 .logoutSuccessUrl("/login")
-                .permitAll();
+                .permitAll() ;
 
-        //TODO 以下这句就可以控制单个用户只能创建一个session，也就只能在服务器登录一次
+        //TODO 控制单个用户只能创建一个session，也就只能在服务器登录一次
         http.sessionManagement().maximumSessions(1).expiredUrl("/login");
     }
 
@@ -117,10 +118,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Bean
+
     public CustomUsernamePasswordAuthenticationFilter CustomAuthenticationFilter() throws Exception {
         CustomUsernamePasswordAuthenticationFilter authenticationFilterChild = new CustomUsernamePasswordAuthenticationFilter();
-        authenticationFilterChild.setAuthenticationManager(authenticationManagerBean());
+        //authenticationFilterChild.setAuthenticationManager(authenticationManagerBean());
+        authenticationFilterChild.setAuthenticationManager(authenticationManager());
         //TODO 使用自己实现authenticationSuccessHandler接口的类
         authenticationFilterChild.setAuthenticationSuccessHandler(authenticationSuccessHandler);
         //TODO 使用自定义的authenticationFailureHandler
@@ -133,5 +135,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         //解决静态资源被拦截的问题
         web.ignoring().antMatchers("/**/*.js", "/css/**");
+
     }
 }

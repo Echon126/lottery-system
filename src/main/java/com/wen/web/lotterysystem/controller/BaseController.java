@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author admin
  * @date 2018-10-29 16:29
  */
-public class BaseController {
+public abstract class BaseController {
 
     //TODO 获取当前经过身份认证的用户的信息
     protected String getContext() {
@@ -19,6 +19,6 @@ public class BaseController {
             username = principal.toString();
         }
         return username;
-
     }
+
 }

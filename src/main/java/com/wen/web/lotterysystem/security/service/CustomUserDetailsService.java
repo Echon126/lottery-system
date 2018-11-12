@@ -79,7 +79,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      * 获取当前用户的信息
      * TODO SecurityContextHolder存储当前与应用程序交互的主体的详细信息
      */
-    public String getContext() {
+   /* public String getContext() {
         //TODO 获取当前经过身份认证的用户的信息
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
@@ -90,5 +90,5 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         return username;
 
-    }
+    }*/
 }

@@ -1,8 +1,5 @@
 package com.wen.web.lotterysystem.data.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author admin
  * @date 2018-10-29 15:07

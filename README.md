@@ -2,9 +2,9 @@
  ### WebSecurityConfigurerAdapter配置中心
  
 ## SecurityContextHolder
-   是最基本的对象，负责存储当前安全上下文的信息，即保存这当前用户是什么，是否已经通过认证，拥有哪些权限，etc.
-   securityContextHolder 默认使用ThreadLocal策略来存储认证信息，意味着这是一种与线程绑定的策略.
-   获取当前用户的信息 
+   #### 是最基本的对象，负责存储当前安全上下文的信息，即保存这当前用户是什么，是否已经通过认证，拥有哪些权限，etc.
+   #### securityContextHolder 默认使用ThreadLocal策略来存储认证信息，意味着这是一种与线程绑定的策略.
+   #### 获取当前用户的信息 
    ```Java
    public class GetContextHolder{
     public Object getPrincipal(){
@@ -49,6 +49,10 @@
         Authentication authenticate(Autentication autentication) throws AuthenticationException;
     }
   ```
+  接口描述：该接口是全局唯一身份管理器，AuthenticatonManager是一个用来处理认证(Authentication)的接口，其中只定义了一个方法
+  authenticate(),该方法只接受一个代表认证请求的Authenticationdui对象作为参数，如果认证成功，则会返回一个封装了当前用户权限
+  等信息的Authentication对象作为返回。 
+  
   该接口只包含一个方法，那就是认证，它是认证相关的核心接口，也是发起认证的出发点。实际的业务中可能根据不同的信息进行认证
   所以可以通过实现该接口来自定义自己的认证方式，spring提供了默认的实现，ProviderManager.
    
@@ -166,6 +170,11 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
 这便是交给additionalAuthenticationChecks方法完成的，如果这个void方法没有抛异常，则认为比对成功。
 比对密码的过程，用到了PasswordEncoder和SaltSource。
 
+
+
+#### SpringSecurity 中的过滤器分析
+
+
      
      
      
@@ -178,10 +187,36 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
      
      
      
+#####@Configuration 注解
+用于定义配置类，可替换XML配置文件，被注解的类内部包括了一个或者更多个被@Bean注解的方法，这些方法将被AnnotationConfigApplicationContext
+或者AnnotationConfigWebApplicationContext类进行扫描并用于构建bean定义，初始化为Spring容器 
+
+当@Configuration类作为输入提供时，@Configuration类本身被注册为bean定义，类中所有声明的@Bean方法也被注册为bean定义。 
+
+     
+     
+package org.springframework.web;  
+public interface WebApplicationInitializer {
+    void onStartup(ServletContext var1) throws ServletException;
+}
+    
      
      
      
      
+   
+   
+Spring容器启动简述
+WebApplicationContext需要ServletContext实例，也是是说必须在拥有Web容器的前提下才能完成启动工作。
+Spring提供了用于启动WebApplicationContext的Servlet和Web容器的监听器
+      org.springframework.web.context.ContextLoaderServlet；
+      org.springframework.web.context.ContextLoaderListener；
+     
+Spring内嵌了两种基础DI容器，即Beanfactory 和ApplicationContext(ApplicationContext) 
+(1)BeanFactory主要用于内存、cpu资源受限的场合，比如Applet,手持设备
+(2)https://img-blog.csdn.net/20140124171918109?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY2hlbnh1ZWd1aTEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center
+
+
      
      
      
