@@ -1,66 +1,146 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>登录 | SpringForAll - Spring Security</title>
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title th:text="${systemName}"></title>
+    <meta name="keywords" content="Echon管理系统">
+    <meta name="description" content="Echon管理系统">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+
 </head>
 
-<body style="background-color: #f1f1f1; padding-bottom: 0">
-
-<div th:insert="~{header :: nav}"></div>
-
-<div class="container" style="margin-top: 60px">
-
-    <div class="row" style="margin-top: 100px">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><span class="glyphicon glyphicon-console"></span> Login</h3>
+<body class="signin">
+<div class="signinpanel">
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="signin-info">
+                <div class="logopanel m-b">
+                    <h1>Echon</h1>
                 </div>
-                <div class="panel-body">
-                    <form th:action="@{/login}" method="post">
-                        <div class="form-group" style="margin-top: 30px">
-                            <div class="input-group col-md-6 col-md-offset-3">
-                                <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
-                                <input type="text" class="form-control" name="username" id="username" placeholder="账号">
-                            </div>
-                        </div>
-                        <div class="form-group ">
-                            <div class="input-group col-md-6 col-md-offset-3">
-                                <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
-                                <input type="password" class="form-control" name="password" id="password"
-                                       placeholder="密码">
-                            </div>
-                        </div>
-                        <br>
-                      <!--  <div th:if="${param.error}">
-                            <p style="text-align: center" class="text-danger" >登录失败，账号或密码错误!</p>
-                        </div>-->
-                        <div>
-                            <p style="text-align: center" class="text-danger" th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">登录失败，账号或密码错误!</p>
-                        </div>
-                        <div th:if="${result}">
-                            <p style="text-align: center" class="text-success" th:text="${result}"></p>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group col-md-6 col-md-offset-3 col-xs-12 ">
-                                <button type="submit" class="btn btn-primary btn-block">登录</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group col-md-6 col-md-offset-3" style="text-align: center">
-                                创建账号 | 忘记密码?
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <div class="m-b"></div>
+                <h3>
+                    欢迎使用 <strong>Echon管理系统</strong>
+                </h3>
             </div>
         </div>
+        <div class="col-sm-5">
+            <form id="signupForm">
+                <h3 class="text-center">用户登录</h3>
+                <p class="m-t-md text-center">欢迎登录Echon后台管理系统</p>
+                <input type="text" name="username" class="form-control uname"
+                       value="admin"/>
+                <input type="password" name="password"
+                       class="form-control pword m-b" value="111111"/>
+                <a id="login" class="btn btn-login btn-block">登录</a>
+                <!--按钮模块-->
+                <div class="outside-login">
+                    <div class="outside-login-tit">
+                        <span>代码链接</span>
+                    </div>
+                    <div class="outside-login-cot">
+                        <a class="outside-login-btn wxoa actived my J-btnSwitchLoginType" target="_Blank"
+                           href="https://gitee.com/lcg0124/bootdo">
+                            <em><i class="fa fa-git-square"></i></em>
+                            <span>码云仓库</span>
+                        </a>
+                        <a class="outside-login-btn wxoa actived git J-btnSwitchLoginType" target="_Blank"
+                           href="https://github.com/lcg0124/bootdo">
+                            <em><i class="fa fa-github"></i></em>
+                            <span>GitHub仓库</span>
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
     </div>
-
+    <div class="signup-footer">
+        <div class="pull-left">&copy; 2018 All Rights Reserved. Echon
+        </div>
+    </div>
 </div>
+<script th:inline="javascript"> var ctx = [[@{
+    /}]] ; </script>
+<!-- 全局js -->
+<script src="/js/jquery.min.js?v=2.1.4" th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
+<script src="/js/bootstrap.min.js?v=3.3.6" th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
 
+<!-- 自定义js -->
+<script src="/js/content.js?v=1.0.0" th:src="@{/js/content.js?v=1.0.0}"></script>
+
+<!-- jQuery Validation plugin javascript-->
+<script src="/js/ajax-util.js"></script>
+<script src="/js/plugins/validate/jquery.validate.min.js"
+        th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
+<script src="/js/plugins/validate/messages_zh.min.js" th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
+<script src="/js/plugins/layer/layer.min.js" th:src="@{/js/plugins/layer/layer.min.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#login").on('click', function () {
+            $("#signupForm").submit();
+        });
+        validateRule();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            login();
+        }
+    });
+
+    function login() {
+        $.ajax({
+            type: "POST",
+            url: ctx + "login",
+            data: $('#signupForm').serialize(),
+            success: function (r) {
+                if (r.code == 0) {
+                    var index = layer.load(1, {
+                        shade: [0.1, '#fff'] //0.1透明度的白色背景
+                    });
+                    parent.location.href = '/index';
+                } else {
+                    layer.msg(r.msg);
+                }
+            },
+        });
+    }
+
+    function validateRule() {
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#signupForm").validate({
+            rules: {
+                username: {
+                    required: true
+                },
+                password: {
+                    required: true
+                }
+            },
+            messages: {
+                username: {
+                    required: icon + "请输入您的用户名",
+                },
+                password: {
+                    required: icon + "请输入您的密码",
+                }
+            }
+        })
+    }
+</script>
 </body>
-
 </html>

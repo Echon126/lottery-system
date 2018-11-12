@@ -1,6 +1,6 @@
 #log日志配置
-#logging:
-#  config: classpath:config/logback.xml
+logging:
+  config: classpath:config/logback.xml
 #内嵌服务器的配置
 server:
   port: 8089
@@ -20,27 +20,28 @@ spring:
   aop:
     auto: false
   datasource:
-   driver-class-name: com.mysql.jdbc.Driver
-   type: com.alibaba.druid.pool.DruidDataSource
-   initialSize: 1
-   maxActive: 20
-   minIdle: 3
-   maxWait: 60000
-   timeBetweenEvictionRunsMillis: 60000
-   minEvictableIdleTimeMillis: 300000
-   validationQuery: SELECT 'x'
-   testWhileIdle: true
-   testOnBorrow: false
-   testOnReturn: false
-   poolPreparedStatements: true
-   maxPoolPreparedStatementPerConnectionSize: 20
-   filters: stat,wall,slf4j
-   connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-   url: jdbc:mysql://127.0.0.1:3306/demo-git?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
-#   url: jdbc:mysql://us-cdbr-iron-east-01.cleardb.net/ad_ce069907811882b?user=b0949dea6dd7b9&password=e73f2288
-   username: root
-   password: newpassword
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 1
+    maxActive: 20
+    minIdle: 3
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,slf4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    #url: jdbc:mysql://127.0.0.1:3306/demo-git?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://127.0.0.1:3306/bootdo?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: newpassword
 
+  ### 配置http请编码，防止出现乱码问题
   http:
     encoding:
       force: true
@@ -48,4 +49,4 @@ spring:
       enabled: true
 
   thymeleaf:
-   cache: false
+    cache: false
