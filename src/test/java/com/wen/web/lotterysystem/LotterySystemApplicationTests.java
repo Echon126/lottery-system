@@ -14,13 +14,4 @@ public class LotterySystemApplicationTests {
 	public void contextLoads() {
 	}
 
-	@Autowired
-	AsyncService asyncService;
-
-	@Test
-	public void testAsync() {
-		asyncService.async1();
-		asyncService.async2();
-	}
-
 }

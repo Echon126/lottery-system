@@ -1,3 +1,4 @@
+
 package com.wen.web.lotterysystem.security.provider;
 
 import com.wen.web.lotterysystem.data.entity.SecurityUser;
@@ -13,10 +14,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
+
 /**
+ * @param
  * @author admin
  * @date 2018-10-30 12:02
+ * <p>
+ * 自定义验证方式
+ * @return
+ * @throws AuthenticationException
  */
+
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -24,13 +32,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
-/**
+
+    /**
      * 自定义验证方式
      *
      * @param authentication
      * @return
      * @throws AuthenticationException
      */
+
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -46,7 +56,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Wrong password.");
         }
 
-        Collection<? extends GrantedAuthority> authorities =  securityUser.getAuthorities();
+        Collection<? extends GrantedAuthority> authorities = securityUser.getAuthorities();
         return new UsernamePasswordAuthenticationToken(securityUser, password, authorities);
     }
 

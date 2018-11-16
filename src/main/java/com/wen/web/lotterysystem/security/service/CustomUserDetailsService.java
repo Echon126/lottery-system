@@ -1,14 +1,15 @@
 package com.wen.web.lotterysystem.security.service;
 
+import com.wen.web.lotterysystem.data.entity.MenuDO;
 import com.wen.web.lotterysystem.data.entity.SecurityUser;
-import com.wen.web.lotterysystem.data.entity.UserInfo;
-import com.wen.web.lotterysystem.service.SecuritySysUserService;
+import com.wen.web.lotterysystem.data.entity.UserDO;
+import com.wen.web.lotterysystem.data.service.impl.UserServiceImp;
+import com.wen.web.lotterysystem.utils.Tree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author admin
@@ -28,16 +28,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     private static Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
     @Autowired  //数据库服务类
-    private SecuritySysUserService securitySysUserService;//code7
+    private UserServiceImp userServiceImp;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         logger.info("开始调用 UerDetailService服务-----------");
-        UserInfo user = null; //code8
-        Set<GrantedAuthority> grantedAuthorities = null;
+        UserDO user = null; //code8
+        List<Tree<MenuDO>> menus = null;
         try {
             //
-            user = securitySysUserService.getSysUserByUserName(userName);
+            user = userServiceImp.get(userName);
 
             //TODO 获取菜单信息
             //grantedAuthorities=securitySysUserService
@@ -51,11 +51,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         // SecurityUser实现UserDetails并将SUser的Email映射为username
-        SecurityUser securityUser = new SecurityUser(user);
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority("USER"));
-        //UserDetails userDetails = new User(user.getAccount(),user.getPassword(),grantedAuthorities);
-        return securityUser; //code9
+        SecurityUser securityUser = new SecurityUser(user, menus);
+        return securityUser;
 
     }
 

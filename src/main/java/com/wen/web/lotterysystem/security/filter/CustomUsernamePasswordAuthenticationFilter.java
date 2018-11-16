@@ -47,7 +47,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
         }*/
 
 
-        request.getSession().setAttribute("user", "user");
+        //request.getSession().setAttribute("user", "user");
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
         this.setDetails(request, authRequest);
         return this.getAuthenticationManager().authenticate(authRequest);

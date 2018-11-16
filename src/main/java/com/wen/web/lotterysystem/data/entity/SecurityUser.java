@@ -1,60 +1,51 @@
 package com.wen.web.lotterysystem.data.entity;
 
+import com.wen.web.lotterysystem.utils.Tree;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
-public class SecurityUser extends UserInfo implements UserDetails {
+
+public class SecurityUser implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    public SecurityUser(UserInfo userInfo) {
-        if (userInfo != null) {
-            this.setId(userInfo.getId());
-            this.setName(userInfo.getName());
-            this.setAccount(userInfo.getAccount());
-            this.setPassword(userInfo.getPassword());
-            this.setSecurityRoles(userInfo.getSecurityRoles());
-        }
+    private UserDO userDO;
+
+    private List<Tree<MenuDO>> menus;
+
+    public SecurityUser(UserDO userDO, List<Tree<MenuDO>> menus) {
+        this.userDO = userDO;
+        this.menus = menus;
     }
 
+    public UserDO getUserDO() {
+        return userDO;
+    }
+
+    public void setUserDO(UserDO userDO) {
+        this.userDO = userDO;
+    }
+
+    public List<Tree<MenuDO>> getMenus() {
+        return menus;
+    }
+
+    public void setMenus(List<Tree<MenuDO>> menus) {
+        this.menus = menus;
+    }
 
     @Override
-    public Collection<GrantedAuthority> getAuthorities() {
-
-
-        Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-
-        Set<SecurityRole> securityRoles = this.getSecurityRoles();
-
-
-        if (securityRoles != null)
-
-        {
-
-            for (SecurityRole role : securityRoles) {
-
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
-
-                authorities.add(authority);
-
-            }
-
-        }
-
-        return authorities;
-
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
-
 
     @Override
     public String getPassword() {
 
-        return super.getPassword();
+        return this.userDO.getPassword();
 
     }
 
@@ -62,7 +53,7 @@ public class SecurityUser extends UserInfo implements UserDetails {
     @Override
     public String getUsername() {
 
-        return super.getName();
+        return this.userDO.getUsername();
 
     }
 

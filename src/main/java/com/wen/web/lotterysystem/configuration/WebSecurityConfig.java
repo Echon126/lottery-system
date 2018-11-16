@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -45,30 +44,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                //TODO  允许所有所用户访问"/"
-                .antMatchers("/").permitAll()
-                //.antMatchers("/user/**").permitAll()
-                //TODO 其他的地址访问均需要验证
-                //.anyRequest().authenticated()
-                .and().addFilterAt(CustomAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
-                //TODO 配置登陆页面
+                .antMatchers("/","/login").permitAll()
+                 .anyRequest().authenticated()
+                .and()
+                //添加自定义过滤器
+                .addFilterAt(CustomAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
-                //TODO 指定登录界面的访问路劲
                 .loginPage("/login")
-                //TODO 登录成功默认跳转的路径
-                .defaultSuccessUrl("/index")
-                //TODO 登陆失败后跳转路径，为了给客户端提示
+                //.defaultSuccessUrl("/main")
                 //.failureUrl("/login?error=true")
                 .and()
-                .logout()//用户退出操作
-                //.logoutRequestMatcher(new AntPathRequestMatcher("/logout","POST")) //用户退出所访问的路径，需要使用POST的方式
+                .logout()
                 .logoutUrl("/logout")
-                //TODO 退出成功后所要访问的路径
-                .logoutSuccessUrl("/login")
-                .permitAll() ;
+                .logoutSuccessUrl("/login");
 
         //TODO 控制单个用户只能创建一个session，也就只能在服务器登录一次
-        http.sessionManagement().maximumSessions(1).expiredUrl("/login");
+        //http.sessionManagement().maximumSessions(1).expiredUrl("/login");
     }
 
     /**
@@ -79,7 +70,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        //auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
         auth.authenticationProvider(daoAuthenticationProvider());
         auth.eraseCredentials(false);//允许记住密码
     }
@@ -110,15 +100,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     //TODO 直接使用以实现AuthenticationSuccessHandler接口的类
-    @Bean
+  /* @Bean
     public SavedRequestAwareAuthenticationSuccessHandler successHandler() {
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
-        successHandler.setDefaultTargetUrl("/user");
+        successHandler.setDefaultTargetUrl("/main");
         return successHandler;
-    }
+    }*/
 
 
-
+    //TODO 添加自定义过滤器
+    @Bean
     public CustomUsernamePasswordAuthenticationFilter CustomAuthenticationFilter() throws Exception {
         CustomUsernamePasswordAuthenticationFilter authenticationFilterChild = new CustomUsernamePasswordAuthenticationFilter();
         //authenticationFilterChild.setAuthenticationManager(authenticationManagerBean());
@@ -134,7 +125,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         //解决静态资源被拦截的问题
-        web.ignoring().antMatchers("/**/*.js", "/css/**");
+        web.ignoring().antMatchers("/js/**", "/css/**","/fonts/**","/img/**");
 
     }
 }
