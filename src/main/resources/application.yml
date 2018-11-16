@@ -6,9 +6,9 @@ server:
   port: 8089
   tomcat:
     uri-encoding: UTF-8
-  servlet:
-    session:
-      timeout: 10
+#  servlet:
+#    session:
+#      timeout: 10
 
 #系统配置文件
 system-config:

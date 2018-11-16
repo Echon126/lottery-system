@@ -1,5 +1,6 @@
 package com.wen.web.lotterysystem.controller;
 
+import com.wen.web.lotterysystem.data.entity.UserDO;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 

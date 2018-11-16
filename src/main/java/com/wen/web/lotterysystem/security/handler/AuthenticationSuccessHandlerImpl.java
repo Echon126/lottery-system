@@ -17,12 +17,11 @@ import java.io.IOException;
  * @author admin
  * @date 2018-10-24 9:51
  */
-
 @Component
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
     private static Logger logger = LoggerFactory.getLogger(AuthenticationSuccessHandlerImpl.class);
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-    private static final String targetUrl="/user";
+    private static final String targetUrl="/main";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
