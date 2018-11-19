@@ -3,7 +3,8 @@ package com.wen.web.lotterysystem.security.service;
 import com.wen.web.lotterysystem.data.entity.MenuDO;
 import com.wen.web.lotterysystem.data.entity.SecurityUser;
 import com.wen.web.lotterysystem.data.entity.UserDO;
-import com.wen.web.lotterysystem.data.service.impl.UserServiceImp;
+import com.wen.web.lotterysystem.data.service.impl.MenuServiceImpl;
+import com.wen.web.lotterysystem.data.service.impl.UserServiceImpl;
 import com.wen.web.lotterysystem.utils.Tree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,21 +28,23 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
     private static Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
-    @Autowired  //数据库服务类
-    private UserServiceImp userServiceImp;
+    @Autowired
+    private UserServiceImpl userServiceImp;
+
+    @Autowired
+    MenuServiceImpl menuService;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         logger.info("开始调用 UerDetailService服务-----------");
-        UserDO user = null; //code8
+        UserDO user = null;
         List<Tree<MenuDO>> menus = null;
         try {
             //
             user = userServiceImp.get(userName);
 
             //TODO 获取菜单信息
-            //grantedAuthorities=securitySysUserService
-
+            menus = menuService.listMenuByUserId(user.getUserId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,7 +53,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("该用户不存在!");
         }
 
-        // SecurityUser实现UserDetails并将SUser的Email映射为username
         SecurityUser securityUser = new SecurityUser(user, menus);
         return securityUser;
 

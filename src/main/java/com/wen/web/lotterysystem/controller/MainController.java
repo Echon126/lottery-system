@@ -13,10 +13,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController extends BaseController {
 
+
     @GetMapping("/main")
     public String index(Model model) {
-        model.addAttribute("username", this.getContext());
+        model.addAttribute("menus", this.getSecurityContext().getMenus());
+        model.addAttribute("name", this.getSecurityContext().getUserDO().getName());
+       /* FileDO fileDO = fileService.get(userDO.getPicId());
+        if (fileDO != null && fileDO.getUrl() != null) {
+            if (fileService.isExist(fileDO.getUrl())) {
+                model.addAttribute("picUrl", fileDO.getUrl());
+            } else {
+                model.addAttribute("picUrl", "/img/photo_s.jpg");
+            }
+        } else {
+            model.addAttribute("picUrl", "/img/photo_s.jpg");
+        }*/
+        model.addAttribute("username", this.getSecurityContext().getUserDO().getUsername());
         return "main";
     }
 
+    @GetMapping("/home")
+    public String home(){
+        return "home";
+    }
 }

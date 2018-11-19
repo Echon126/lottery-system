@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -43,6 +44,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
         http.authorizeRequests()
                 .antMatchers("/","/login").permitAll()
                  .anyRequest().authenticated()
@@ -60,6 +63,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //TODO 控制单个用户只能创建一个session，也就只能在服务器登录一次
         //http.sessionManagement().maximumSessions(1).expiredUrl("/login");
+        //always – 如果session不存在总是需要创建；
+        //ifRequired – 仅当需要时，创建session(默认配置)；
+        //never – 框架从不创建session，但如果已经存在，会使用该session ；
+        //stateless – Spring Security不会创建session，或使用session；
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
     }
 
     /**
@@ -121,6 +130,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationFilterChild;
     }
 
+    // 自定义会话超时登出 Bean
+//    @Bean
+//    public AjaxAwareAuthenticationEntryPoint ajaxAwareAuthenticationEntryPoint() {
+//        return new AjaxAwareAuthenticationEntryPoint("/login");
+//    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {

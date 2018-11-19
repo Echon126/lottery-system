@@ -106,6 +106,7 @@ $(function () {
     });
 
     function menuItem() {
+        debugger
         // 获取标识数据
         var dataUrl = $(this).attr('href'),
             dataIndex = $(this).data('index'),

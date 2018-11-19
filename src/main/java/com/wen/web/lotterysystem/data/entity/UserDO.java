@@ -9,7 +9,7 @@ import java.util.List;
 public class UserDO implements Serializable {
     private static final long serialVersionUID = 1L;
     //
-    private String userId;
+    private Long userId;
     // 用户名
     private String username;
     // 用户真实姓名
@@ -51,11 +51,11 @@ public class UserDO implements Serializable {
     //所在地区
     private String district;
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

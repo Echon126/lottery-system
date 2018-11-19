@@ -6,9 +6,10 @@ server:
   port: 8089
   tomcat:
     uri-encoding: UTF-8
-#  servlet:
-#    session:
-#      timeout: 10
+  ### 设置session失效时长
+  servlet:
+    session:
+      timeout: 60
 
 #系统配置文件
 system-config:
@@ -36,7 +37,6 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     filters: stat,wall,slf4j
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-    #url: jdbc:mysql://127.0.0.1:3306/demo-git?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
     url: jdbc:mysql://127.0.0.1:3306/bootdo?useUnicode=true&characterEncoding=utf8
     username: root
     password: newpassword
@@ -50,3 +50,9 @@ spring:
 
   thymeleaf:
     cache: false
+
+mybatis:
+  configuration:
+    callSettersOnNulls: true
+    ##驼峰命名转化
+    map-underscore-to-camel-case: true
