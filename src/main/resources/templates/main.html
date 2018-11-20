@@ -51,8 +51,10 @@
                     </a>
                     <ul class="nav nav-second-level">
                         <li th:each="cmenu : ${menu.children}">
+                            <!--<a class="J_menuItem"  th:text="${cmenu.text}"
+                               th:onclick="'javascript:pageController(\''+${cmenu.attributes.url}+'\');'">系统管理</a></li>-->
                             <a class="J_menuItem"  th:text="${cmenu.text}"
-                               th:onclick="'javascript:pageController(\''+${cmenu.attributes.url}+'\');'">系统管理</a></li>
+                               th:href="${cmenu.attributes.url}">系统管理</a></li>
                     </ul>
                 </li>
             </ul>
