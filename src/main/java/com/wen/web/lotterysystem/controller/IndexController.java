@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @date 2018-11-16 14:06
  */
 @Controller
+
+//@RequestMapping("/api/")
 public class IndexController extends BaseController {
     @Autowired
     SystemConfig systemConfig;
