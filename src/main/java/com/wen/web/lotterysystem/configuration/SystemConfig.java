@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class SystemConfig {
     private String systemName;
     private String pageName;
+    private String vmPath;
 
     public String getSystemName() {
         return systemName;
@@ -27,5 +28,13 @@ public class SystemConfig {
 
     public void setPageName(String pageName) {
         this.pageName = pageName;
+    }
+
+    public String getVmPath() {
+        return vmPath;
+    }
+
+    public void setVmPath(String vmPath) {
+        this.vmPath = vmPath;
     }
 }

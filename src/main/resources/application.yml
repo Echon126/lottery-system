@@ -15,6 +15,7 @@ server:
 system-config:
   system-name: "社区讨论系统"
   page-name: "系统登录"
+  vm-path: "vm/xml_object.vm"
 
 #spring的配置
 spring:
