@@ -1,0 +1,9 @@
+<Mapping ParentType="$!ParentType" ParentID="$!ParentID" ParentCode="$!ParentCode" ElementType="$!ElementType" ElementID="$!ElementID" ElementCode="$!ElementCode" Action="$!Action">
+	<Property Name="Name"><![CDATA[$!Name]]></Property>
+	<Property Name="Type">$!Type</Property>
+	<Property Name="Sequence">$!Sequence</Property>
+	<Property Name="ValidStart">$!ValidStart</Property>
+	<Property Name="ValidEnd">$!ValidEnd</Property>
+	<Property Name="Result">$!Result</Property>
+	<Property Name="ErrorDescription">$!ErrorDescription</Property>
+</Mapping>
